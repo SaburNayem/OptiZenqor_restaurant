@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../app/routes/app_routes.dart';
+import '../../../routes/app_routes.dart';
 import '../../../core/widgets/app_shell.dart';
 import '../../../core/widgets/empty_state.dart';
 import '../../../core/widgets/food_item_card.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../app/routes/app_routes.dart';
+import '../../../routes/app_routes.dart';
 import '../../../core/widgets/primary_button.dart';
 
 class OrderSuccessScreen extends StatelessWidget {

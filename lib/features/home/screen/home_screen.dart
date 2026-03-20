@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../app/routes/app_routes.dart';
+import '../../../routes/app_routes.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/widgets/app_search_field.dart';
 import '../../../core/widgets/app_shell.dart';

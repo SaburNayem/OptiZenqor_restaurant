@@ -6,7 +6,7 @@ import '../../../core/widgets/loading_skeleton.dart';
 import '../../../core/widgets/restaurant_card.dart';
 import '../controller/restaurant_controller.dart';
 import '../model/restaurant_filter.dart';
-import '../../../app/routes/app_routes.dart';
+import '../../../routes/app_routes.dart';
 import '../../favorites/controller/favorites_controller.dart';
 
 class RestaurantListScreen extends GetView<RestaurantController> {
