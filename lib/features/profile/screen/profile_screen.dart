@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../routes/app_routes.dart';
 import '../../../core/widgets/app_shell.dart';
+import '../../../routes/app_routes.dart';
 import '../controller/profile_controller.dart';
 
 class ProfileScreen extends GetView<ProfileController> {
@@ -30,9 +30,14 @@ class ProfileScreen extends GetView<ProfileController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const CircleAvatar(
+                  CircleAvatar(
                     radius: 32,
-                    child: Icon(Icons.person_rounded, size: 32),
+                    backgroundImage: profile.avatarBytes != null
+                        ? MemoryImage(profile.avatarBytes!)
+                        : null,
+                    child: profile.avatarBytes == null
+                        ? const Icon(Icons.person_rounded, size: 32)
+                        : null,
                   ),
                   const SizedBox(height: 16),
                   Text(
