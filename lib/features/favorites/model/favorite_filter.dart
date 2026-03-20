@@ -1,0 +1,1 @@
+enum FavoriteView { restaurants, dishes }

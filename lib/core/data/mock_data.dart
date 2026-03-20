@@ -1,0 +1,455 @@
+import 'package:flutter/material.dart';
+
+import '../models/address.dart';
+import '../models/category.dart';
+import '../models/food_item.dart';
+import '../models/notification_item.dart';
+import '../models/order.dart';
+import '../models/payment_method.dart';
+import '../models/restaurant.dart';
+import '../models/review.dart';
+import '../models/user_profile.dart';
+
+class MockData {
+  static const categories = <FoodCategory>[
+    FoodCategory(
+      id: 'burgers',
+      name: 'Burgers',
+      icon: Icons.lunch_dining,
+      color: Color(0xFFFFD4AE),
+    ),
+    FoodCategory(
+      id: 'pizza',
+      name: 'Pizza',
+      icon: Icons.local_pizza,
+      color: Color(0xFFFFC8B8),
+    ),
+    FoodCategory(
+      id: 'biryani',
+      name: 'Biryani',
+      icon: Icons.rice_bowl,
+      color: Color(0xFFFFE3A3),
+    ),
+    FoodCategory(
+      id: 'bbq',
+      name: 'BBQ',
+      icon: Icons.outdoor_grill,
+      color: Color(0xFFFFD0C9),
+    ),
+    FoodCategory(
+      id: 'chinese',
+      name: 'Chinese',
+      icon: Icons.ramen_dining,
+      color: Color(0xFFD7F0C8),
+    ),
+    FoodCategory(
+      id: 'indian',
+      name: 'Indian',
+      icon: Icons.dinner_dining,
+      color: Color(0xFFFFE0C7),
+    ),
+    FoodCategory(
+      id: 'thai',
+      name: 'Thai',
+      icon: Icons.set_meal,
+      color: Color(0xFFCBE9E3),
+    ),
+    FoodCategory(
+      id: 'arabic',
+      name: 'Arabic',
+      icon: Icons.kebab_dining,
+      color: Color(0xFFEAD6FF),
+    ),
+    FoodCategory(
+      id: 'seafood',
+      name: 'Seafood',
+      icon: Icons.phishing,
+      color: Color(0xFFCFE7FF),
+    ),
+    FoodCategory(
+      id: 'desserts',
+      name: 'Desserts',
+      icon: Icons.icecream,
+      color: Color(0xFFFFD4E5),
+    ),
+    FoodCategory(
+      id: 'bakery',
+      name: 'Bakery',
+      icon: Icons.bakery_dining,
+      color: Color(0xFFF4DEC8),
+    ),
+    FoodCategory(
+      id: 'coffee',
+      name: 'Coffee',
+      icon: Icons.coffee,
+      color: Color(0xFFE2CCBC),
+    ),
+    FoodCategory(
+      id: 'healthy',
+      name: 'Healthy food',
+      icon: Icons.eco,
+      color: Color(0xFFD8F1CD),
+    ),
+    FoodCategory(
+      id: 'fast',
+      name: 'Fast food',
+      icon: Icons.fastfood,
+      color: Color(0xFFFFD7B5),
+    ),
+    FoodCategory(
+      id: 'drinks',
+      name: 'Drinks',
+      icon: Icons.local_drink,
+      color: Color(0xFFCDEEFF),
+    ),
+    FoodCategory(
+      id: 'street',
+      name: 'Street food',
+      icon: Icons.storefront,
+      color: Color(0xFFFFE2B8),
+    ),
+  ];
+
+  static const restaurants = <Restaurant>[
+    Restaurant(
+      id: 'r1',
+      name: 'Saffron Flame',
+      description: 'Modern biryani, kebab, and slow-cooked comfort bowls.',
+      cuisines: ['Biryani', 'BBQ', 'Indian'],
+      rating: 4.8,
+      deliveryTime: 25,
+      minimumOrder: 12,
+      deliveryFee: 2.5,
+      tags: ['Best Seller', 'Free drink', 'Halal'],
+      isOpen: true,
+      priceRange: '\$\$',
+      bannerGradient: [0xFFB33F22, 0xFFF28B50],
+    ),
+    Restaurant(
+      id: 'r2',
+      name: 'Urban Crust',
+      description: 'Stone-baked pizzas, cheesy bites, and signature sauces.',
+      cuisines: ['Pizza', 'Italian', 'Fast food'],
+      rating: 4.7,
+      deliveryTime: 30,
+      minimumOrder: 15,
+      deliveryFee: 3.2,
+      tags: ['Buy 1 Get 1', 'Family combo'],
+      isOpen: true,
+      priceRange: '\$\$',
+      bannerGradient: [0xFF8E3B2E, 0xFFD8732D],
+    ),
+    Restaurant(
+      id: 'r3',
+      name: 'Green Bowl Kitchen',
+      description: 'Protein bowls, salads, wraps, and fresh juices.',
+      cuisines: ['Healthy food', 'Drinks', 'Seafood'],
+      rating: 4.6,
+      deliveryTime: 20,
+      minimumOrder: 10,
+      deliveryFee: 1.9,
+      tags: ['Low calorie', 'Fresh picks'],
+      isOpen: true,
+      priceRange: '\$\$\$',
+      bannerGradient: [0xFF26785A, 0xFF57BE8E],
+    ),
+    Restaurant(
+      id: 'r4',
+      name: 'Night Market Wok',
+      description: 'Street-style noodles, dim sum, and wok-fried specials.',
+      cuisines: ['Chinese', 'Thai', 'Street food'],
+      rating: 4.5,
+      deliveryTime: 35,
+      minimumOrder: 14,
+      deliveryFee: 2.8,
+      tags: ['Late night', 'Spicy picks'],
+      isOpen: false,
+      priceRange: '\$',
+      bannerGradient: [0xFF334A8B, 0xFF55A4E0],
+    ),
+  ];
+
+  static final foods = <FoodItem>[
+    FoodItem(
+      id: 'f1',
+      restaurantId: 'r1',
+      name: 'Royal Chicken Biryani',
+      description:
+          'Aromatic basmati rice layered with saffron chicken and fried onions.',
+      price: 13.5,
+      category: 'Biryani',
+      rating: 4.9,
+      prepTime: 18,
+      tags: ['Popular', 'Chef special'],
+      addOns: const [
+        AddOn(id: 'a1', name: 'Extra egg', price: 1.2),
+        AddOn(id: 'a2', name: 'Raita cup', price: 0.9),
+      ],
+      reviews: const [
+        Review(
+          id: 'rv1',
+          userName: 'Nadia',
+          rating: 5,
+          comment: 'Rich flavor and generous portion.',
+          timeAgo: '2d ago',
+        ),
+        Review(
+          id: 'rv2',
+          userName: 'Rahat',
+          rating: 4.8,
+          comment: 'Perfect spice balance.',
+          timeAgo: '5d ago',
+        ),
+      ],
+      isPopular: true,
+    ),
+    FoodItem(
+      id: 'f2',
+      restaurantId: 'r1',
+      name: 'Smoky Beef Kebab Platter',
+      description: 'Char-grilled kebabs with butter naan and pickled salad.',
+      price: 15.0,
+      category: 'BBQ',
+      rating: 4.7,
+      prepTime: 20,
+      tags: ['High protein'],
+      addOns: const [
+        AddOn(id: 'a3', name: 'Garlic naan', price: 1.5),
+        AddOn(id: 'a4', name: 'Mint sauce', price: 0.6),
+      ],
+      reviews: const [
+        Review(
+          id: 'rv3',
+          userName: 'Anik',
+          rating: 4.7,
+          comment: 'Tender meat and smoky taste.',
+          timeAgo: '1w ago',
+        ),
+      ],
+    ),
+    FoodItem(
+      id: 'f3',
+      restaurantId: 'r2',
+      name: 'Truffle Pepperoni Pizza',
+      description:
+          'Thin crust pizza with truffle cream, pepperoni, and basil oil.',
+      price: 16.2,
+      category: 'Pizza',
+      rating: 4.8,
+      prepTime: 16,
+      tags: ['Premium'],
+      addOns: const [
+        AddOn(id: 'a5', name: 'Extra mozzarella', price: 1.8),
+        AddOn(id: 'a6', name: 'Stuffed crust', price: 2.2),
+      ],
+      reviews: const [
+        Review(
+          id: 'rv4',
+          userName: 'Mumu',
+          rating: 4.9,
+          comment: 'Absolute comfort food.',
+          timeAgo: '3d ago',
+        ),
+      ],
+      isPopular: true,
+    ),
+    FoodItem(
+      id: 'f4',
+      restaurantId: 'r2',
+      name: 'Firecracker Burger',
+      description:
+          'Double smashed beef, cheddar, caramelized onion, and spicy aioli.',
+      price: 11.8,
+      category: 'Burgers',
+      rating: 4.6,
+      prepTime: 14,
+      tags: ['Fast seller'],
+      addOns: const [
+        AddOn(id: 'a7', name: 'Fries', price: 2.0),
+        AddOn(id: 'a8', name: 'Cola', price: 1.2),
+      ],
+      reviews: const [],
+      isPopular: true,
+    ),
+    FoodItem(
+      id: 'f5',
+      restaurantId: 'r3',
+      name: 'Salmon Power Bowl',
+      description:
+          'Grilled salmon, avocado, quinoa, greens, and miso dressing.',
+      price: 14.4,
+      category: 'Healthy food',
+      rating: 4.7,
+      prepTime: 12,
+      tags: ['Omega rich'],
+      addOns: const [AddOn(id: 'a9', name: 'Extra avocado', price: 1.4)],
+      reviews: const [],
+      isPopular: true,
+    ),
+    FoodItem(
+      id: 'f6',
+      restaurantId: 'r4',
+      name: 'Bangkok Basil Noodles',
+      description:
+          'Wok-fried noodles with basil, chili, vegetables, and your protein of choice.',
+      price: 12.1,
+      category: 'Thai',
+      rating: 4.4,
+      prepTime: 15,
+      tags: ['Street style'],
+      addOns: const [],
+      reviews: const [],
+    ),
+  ];
+
+  static const addresses = <Address>[
+    Address(
+      id: 'ad1',
+      label: 'Home',
+      addressLine: 'House 11, Road 7, Dhanmondi',
+      note: 'Ring the bell twice',
+      isDefault: true,
+    ),
+    Address(
+      id: 'ad2',
+      label: 'Office',
+      addressLine: 'Level 8, Banani Tower, Banani',
+      note: 'Leave at reception',
+    ),
+  ];
+
+  static const paymentMethods = <PaymentMethod>[
+    PaymentMethod(
+      id: 'pm1',
+      label: 'Cash on delivery',
+      description: 'Pay when your meal arrives',
+      type: 'cod',
+      isSelected: true,
+    ),
+    PaymentMethod(
+      id: 'pm2',
+      label: 'Visa •••• 2048',
+      description: 'Default card ending in 2048',
+      type: 'card',
+    ),
+    PaymentMethod(
+      id: 'pm3',
+      label: 'Wallet balance',
+      description: '\$24.00 available',
+      type: 'wallet',
+    ),
+  ];
+
+  static const notifications = <AppNotificationItem>[
+    AppNotificationItem(
+      id: 'n1',
+      title: 'Order on the way',
+      message: 'Your Saffron Flame order is out for delivery.',
+      time: '5 min ago',
+      type: 'order',
+    ),
+    AppNotificationItem(
+      id: 'n2',
+      title: 'Weekend feast deal',
+      message: 'Save 25% on selected pizza combos tonight.',
+      time: '1 h ago',
+      type: 'offer',
+    ),
+    AppNotificationItem(
+      id: 'n3',
+      title: 'New dessert drop',
+      message: 'Urban Crust just added molten cookie skillets.',
+      time: 'Yesterday',
+      type: 'promo',
+      isUnread: false,
+    ),
+  ];
+
+  static const orders = <OrderSummary>[
+    OrderSummary(
+      id: 'o1',
+      restaurantName: 'Saffron Flame',
+      itemNames: ['Royal Chicken Biryani', 'Smoky Beef Kebab Platter'],
+      total: 31.25,
+      status: 'Out for delivery',
+      createdAtLabel: 'Today, 8:15 PM',
+      addressLabel: 'Home, Dhanmondi',
+      isActive: true,
+      timeline: [
+        OrderStatusStep(
+          label: 'Confirmed',
+          isCompleted: true,
+          isCurrent: false,
+        ),
+        OrderStatusStep(
+          label: 'Preparing',
+          isCompleted: true,
+          isCurrent: false,
+        ),
+        OrderStatusStep(
+          label: 'Out for delivery',
+          isCompleted: true,
+          isCurrent: true,
+        ),
+        OrderStatusStep(
+          label: 'Delivered',
+          isCompleted: false,
+          isCurrent: false,
+        ),
+      ],
+    ),
+    OrderSummary(
+      id: 'o2',
+      restaurantName: 'Urban Crust',
+      itemNames: ['Truffle Pepperoni Pizza'],
+      total: 19.80,
+      status: 'Delivered',
+      createdAtLabel: 'Yesterday, 7:05 PM',
+      addressLabel: 'Office, Banani',
+      isActive: false,
+      timeline: [
+        OrderStatusStep(
+          label: 'Confirmed',
+          isCompleted: true,
+          isCurrent: false,
+        ),
+        OrderStatusStep(
+          label: 'Preparing',
+          isCompleted: true,
+          isCurrent: false,
+        ),
+        OrderStatusStep(
+          label: 'Out for delivery',
+          isCompleted: true,
+          isCurrent: false,
+        ),
+        OrderStatusStep(label: 'Delivered', isCompleted: true, isCurrent: true),
+      ],
+    ),
+  ];
+
+  static const profile = UserProfile(
+    name: 'Ariana Noor',
+    email: 'ariana.noor@example.com',
+    phone: '+880 1712 345678',
+    membershipLevel: 'Gold foodie',
+  );
+
+  static const recentSearches = [
+    'Biryani',
+    'Thai noodles',
+    'Seafood',
+    'Desserts',
+  ];
+  static const trendingSearches = [
+    'Smash burger',
+    'Iced latte',
+    'Kebab box',
+    'Healthy bowls',
+  ];
+  static const promoMessages = [
+    'Free delivery on all orders above \$20',
+    'Flash deal: 15% off BBQ platters',
+    'Weekend combo offers from top-rated restaurants',
+  ];
+}
