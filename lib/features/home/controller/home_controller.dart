@@ -12,7 +12,7 @@ class HomeController extends GetxController {
 
   final MockApiService _apiService;
   final searchController = TextEditingController();
-  final location = 'Dhanmondi, Dhaka'.obs;
+  final location = 'OptiZenqor_restaurant - Mirpur 1'.obs;
   final isLoading = true.obs;
   final categories = <FoodCategory>[].obs;
   final restaurants = <Restaurant>[].obs;

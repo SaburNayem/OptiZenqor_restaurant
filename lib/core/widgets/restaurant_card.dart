@@ -22,6 +22,9 @@ class RestaurantCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final gradient = restaurant.bannerGradient.map(Color.new).toList();
     final nearestBranch = restaurant.nearestBranch;
+    final displayTitle = nearestBranch == null
+        ? restaurant.name
+        : '${restaurant.name} - ${nearestBranch.area}';
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(24),
@@ -80,7 +83,7 @@ class RestaurantCard extends StatelessWidget {
               ),
               const SizedBox(height: 14),
               Text(
-                restaurant.name,
+                displayTitle,
                 style: Theme.of(
                   context,
                 ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),

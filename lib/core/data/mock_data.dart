@@ -113,7 +113,7 @@ class MockData {
   static const restaurants = <Restaurant>[
     Restaurant(
       id: 'r1',
-      name: 'Saffron Flame',
+      name: 'OptiZenqor_restaurant',
       description: 'Modern biryani, kebab, and slow-cooked comfort bowls.',
       cuisines: ['Biryani', 'BBQ', 'Indian'],
       rating: 4.8,
@@ -127,9 +127,9 @@ class MockData {
       branches: [
         RestaurantBranch(
           id: 'r1b1',
-          name: 'Saffron Flame Dhanmondi',
-          area: 'Dhanmondi',
-          address: 'House 21, Road 8A, Dhanmondi, Dhaka',
+          name: 'OptiZenqor_restaurant Mirpur 1',
+          area: 'Mirpur 1',
+          address: 'House 21, Main Road, Mirpur 1, Dhaka',
           openHours: '11:00 AM - 11:30 PM',
           phone: '+880 1700 111111',
           distanceKm: 1.2,
@@ -143,9 +143,9 @@ class MockData {
         ),
         RestaurantBranch(
           id: 'r1b2',
-          name: 'Saffron Flame Banani',
-          area: 'Banani',
-          address: 'Block C, Road 11, Banani, Dhaka',
+          name: 'OptiZenqor_restaurant Mirpur 10',
+          area: 'Mirpur 10',
+          address: 'Block C, Circle 10, Mirpur 10, Dhaka',
           openHours: '12:00 PM - 12:00 AM',
           phone: '+880 1700 111112',
           distanceKm: 4.8,
@@ -158,7 +158,7 @@ class MockData {
         ),
         RestaurantBranch(
           id: 'r1b3',
-          name: 'Saffron Flame Uttara',
+          name: 'OptiZenqor_restaurant Uttara',
           area: 'Uttara',
           address: 'Sector 7, Sonargaon Janapath, Uttara, Dhaka',
           openHours: '11:30 AM - 11:00 PM',
@@ -175,7 +175,7 @@ class MockData {
     ),
     Restaurant(
       id: 'r2',
-      name: 'Urban Crust',
+      name: 'OptiZenqor_restaurant',
       description: 'Stone-baked pizzas, cheesy bites, and signature sauces.',
       cuisines: ['Pizza', 'Italian', 'Fast food'],
       rating: 4.7,
@@ -189,9 +189,9 @@ class MockData {
       branches: [
         RestaurantBranch(
           id: 'r2b1',
-          name: 'Urban Crust Gulshan',
-          area: 'Gulshan 2',
-          address: 'Road 54, Gulshan 2, Dhaka',
+          name: 'OptiZenqor_restaurant Dhanmondi',
+          area: 'Dhanmondi',
+          address: 'Road 4, Dhanmondi, Dhaka',
           openHours: '10:30 AM - 11:45 PM',
           phone: '+880 1700 222221',
           distanceKm: 5.6,
@@ -205,7 +205,7 @@ class MockData {
         ),
         RestaurantBranch(
           id: 'r2b2',
-          name: 'Urban Crust Bashundhara',
+          name: 'OptiZenqor_restaurant Bashundhara',
           area: 'Bashundhara',
           address: 'Block A, Bashundhara R/A, Dhaka',
           openHours: '11:00 AM - 11:00 PM',
@@ -222,7 +222,7 @@ class MockData {
     ),
     Restaurant(
       id: 'r3',
-      name: 'Green Bowl Kitchen',
+      name: 'OptiZenqor_restaurant',
       description: 'Protein bowls, salads, wraps, and fresh juices.',
       cuisines: ['Healthy food', 'Drinks', 'Seafood'],
       rating: 4.6,
@@ -236,9 +236,9 @@ class MockData {
       branches: [
         RestaurantBranch(
           id: 'r3b1',
-          name: 'Green Bowl Kitchen Dhanmondi',
-          area: 'Dhanmondi',
-          address: 'Satmasjid Road, Dhanmondi, Dhaka',
+          name: 'OptiZenqor_restaurant Mohakhali',
+          area: 'Mohakhali',
+          address: 'Wireless Gate, Mohakhali, Dhaka',
           openHours: '8:00 AM - 10:30 PM',
           phone: '+880 1700 333331',
           distanceKm: 1.8,
@@ -252,7 +252,7 @@ class MockData {
         ),
         RestaurantBranch(
           id: 'r3b2',
-          name: 'Green Bowl Kitchen Mirpur',
+          name: 'OptiZenqor_restaurant Mirpur DOHS',
           area: 'Mirpur DOHS',
           address: 'Avenue 6, Mirpur DOHS, Dhaka',
           openHours: '8:30 AM - 10:00 PM',
@@ -269,7 +269,7 @@ class MockData {
     ),
     Restaurant(
       id: 'r4',
-      name: 'Night Market Wok',
+      name: 'OptiZenqor_restaurant',
       description: 'Street-style noodles, dim sum, and wok-fried specials.',
       cuisines: ['Chinese', 'Thai', 'Street food'],
       rating: 4.5,
@@ -283,7 +283,7 @@ class MockData {
       branches: [
         RestaurantBranch(
           id: 'r4b1',
-          name: 'Night Market Wok Wari',
+          name: 'OptiZenqor_restaurant Wari',
           area: 'Wari',
           address: 'Rankin Street, Wari, Old Dhaka',
           openHours: '4:00 PM - 1:00 AM',
@@ -300,7 +300,7 @@ class MockData {
         ),
         RestaurantBranch(
           id: 'r4b2',
-          name: 'Night Market Wok Mohammadpur',
+          name: 'OptiZenqor_restaurant Mohammadpur',
           area: 'Mohammadpur',
           address: 'Tajmahal Road, Mohammadpur, Dhaka',
           openHours: '5:00 PM - 12:30 AM',

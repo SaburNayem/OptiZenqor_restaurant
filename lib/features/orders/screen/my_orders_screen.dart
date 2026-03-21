@@ -39,117 +39,130 @@ class MyOrdersScreen extends GetView<OrdersController> {
               ],
             ),
             Expanded(
-              child: Obx(
-                () => TabBarView(
+              child: Obx(() {
+                final activeOrders = controller.activeOrders;
+                final pastOrders = controller.pastOrders;
+                final cancelledOrders = controller.cancelledOrders;
+
+                return TabBarView(
                   children: [
-                    controller.activeOrders.isEmpty
-                        ? const Padding(
-                            padding: EdgeInsets.all(20),
-                            child: EmptyState(
-                              title: 'No active orders',
-                              message:
-                                  'Your live delivery updates will appear here.',
-                              icon: Icons.delivery_dining_rounded,
+                    _OrdersTabContent(
+                      emptyTitle: 'No active orders',
+                      emptyMessage:
+                          'Your live restaurant updates will appear here.',
+                      emptyIcon: Icons.delivery_dining_rounded,
+                      children: activeOrders
+                          .map(
+                            (order) => _OrderTile(
+                              title: order.restaurantName,
+                              subtitle: order.itemNames.join(', '),
+                              trailing: order.status,
+                              amount: AppFormatters.currency(order.total),
+                              onTap: () => Get.toNamed(
+                                AppRoutes.orderTracking,
+                                arguments: order.id,
+                              ),
                             ),
                           )
-                        : ListView.builder(
-                            padding: const EdgeInsets.all(20),
-                            itemCount: controller.activeOrders.length,
-                            itemBuilder: (context, index) {
-                              final order = controller.activeOrders[index];
-                              return _OrderTile(
-                                title: order.restaurantName,
-                                subtitle: order.itemNames.join(', '),
-                                trailing: order.status,
-                                amount: AppFormatters.currency(order.total),
-                                onTap: () => Get.toNamed(
-                                  AppRoutes.orderTracking,
-                                  arguments: order.id,
-                                ),
-                              );
-                            },
-                          ),
-                    controller.pastOrders.isEmpty
-                        ? const Padding(
-                            padding: EdgeInsets.all(20),
-                            child: EmptyState(
-                              title: 'No past orders',
-                              message:
-                                  'Completed orders and invoices will show up here.',
-                              icon: Icons.receipt_long_rounded,
-                            ),
-                          )
-                        : ListView.builder(
-                            padding: const EdgeInsets.all(20),
-                            itemCount: controller.pastOrders.length,
-                            itemBuilder: (context, index) {
-                              final order = controller.pastOrders[index];
-                              return _OrderTile(
-                                title: order.restaurantName,
-                                subtitle: order.createdAtLabel,
-                                trailing: 'Reorder',
-                                amount: AppFormatters.currency(order.total),
-                                onTap: () {
-                                  final restaurant = restaurantController
-                                      .restaurants
-                                      .firstWhereOrNull(
-                                        (item) =>
-                                            item.name == order.restaurantName,
-                                      );
-                                  if (restaurant != null) {
-                                    final item = restaurantController.foodItems
-                                        .firstWhereOrNull(
-                                          (food) =>
-                                              food.restaurantId ==
-                                              restaurant.id,
-                                        );
-                                    if (item != null) {
-                                      cartController.addItem(item);
-                                      Get.toNamed(AppRoutes.cart);
-                                    }
-                                  }
-                                },
-                                secondaryTap: () => Get.toNamed(
-                                  AppRoutes.orderDetail,
-                                  arguments: order.id,
-                                ),
-                              );
-                            },
-                          ),
-                  ],
-                ),
-              ),
-            ),
-            controller.cancelledOrders.isEmpty
-                ? const Padding(
-                    padding: EdgeInsets.all(20),
-                    child: EmptyState(
-                      title: 'No cancelled orders',
-                      message: 'Cancelled restaurant orders will appear here.',
-                      icon: Icons.cancel_outlined,
+                          .toList(),
                     ),
-                  )
-                : ListView.builder(
-                    padding: const EdgeInsets.all(20),
-                    itemCount: controller.cancelledOrders.length,
-                    itemBuilder: (context, index) {
-                      final order = controller.cancelledOrders[index];
-                      return _OrderTile(
-                        title: order.restaurantName,
-                        subtitle: order.createdAtLabel,
-                        trailing: order.status,
-                        amount: AppFormatters.currency(order.total),
-                        onTap: () => Get.toNamed(
-                          AppRoutes.orderDetail,
-                          arguments: order.id,
-                        ),
-                      );
-                    },
-                  ),
+                    _OrdersTabContent(
+                      emptyTitle: 'No past orders',
+                      emptyMessage:
+                          'Completed restaurant orders and invoices will show up here.',
+                      emptyIcon: Icons.receipt_long_rounded,
+                      children: pastOrders
+                          .map(
+                            (order) => _OrderTile(
+                              title: order.restaurantName,
+                              subtitle: order.createdAtLabel,
+                              trailing: 'Reorder',
+                              amount: AppFormatters.currency(order.total),
+                              onTap: () {
+                                final restaurant = restaurantController
+                                    .restaurants
+                                    .firstWhereOrNull(
+                                      (item) =>
+                                          item.name == order.restaurantName,
+                                    );
+                                if (restaurant != null) {
+                                  final item = restaurantController.foodItems
+                                      .firstWhereOrNull(
+                                        (food) =>
+                                            food.restaurantId == restaurant.id,
+                                      );
+                                  if (item != null) {
+                                    cartController.addItem(item);
+                                    Get.toNamed(AppRoutes.cart);
+                                  }
+                                }
+                              },
+                              secondaryTap: () => Get.toNamed(
+                                AppRoutes.orderDetail,
+                                arguments: order.id,
+                              ),
+                            ),
+                          )
+                          .toList(),
+                    ),
+                    _OrdersTabContent(
+                      emptyTitle: 'No cancelled orders',
+                      emptyMessage:
+                          'Cancelled restaurant orders will appear here.',
+                      emptyIcon: Icons.cancel_outlined,
+                      children: cancelledOrders
+                          .map(
+                            (order) => _OrderTile(
+                              title: order.restaurantName,
+                              subtitle: order.createdAtLabel,
+                              trailing: order.status,
+                              amount: AppFormatters.currency(order.total),
+                              onTap: () => Get.toNamed(
+                                AppRoutes.orderDetail,
+                                arguments: order.id,
+                              ),
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ],
+                );
+              }),
+            ),
           ],
         ),
       ),
     );
+  }
+}
+
+class _OrdersTabContent extends StatelessWidget {
+  const _OrdersTabContent({
+    required this.emptyTitle,
+    required this.emptyMessage,
+    required this.emptyIcon,
+    required this.children,
+  });
+
+  final String emptyTitle;
+  final String emptyMessage;
+  final IconData emptyIcon;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    if (children.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.all(20),
+        child: EmptyState(
+          title: emptyTitle,
+          message: emptyMessage,
+          icon: emptyIcon,
+        ),
+      );
+    }
+
+    return ListView(padding: const EdgeInsets.all(20), children: children);
   }
 }
 

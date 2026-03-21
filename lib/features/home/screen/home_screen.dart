@@ -54,7 +54,7 @@ class HomeScreen extends GetView<HomeController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'My restaurant',
+                          'OptiZenqor_restaurant',
                           style: Theme.of(context).textTheme.bodySmall
                               ?.copyWith(color: AppColors.textSecondary),
                         ),
@@ -239,8 +239,8 @@ class HomeScreen extends GetView<HomeController> {
                     ),
                 const SizedBox(height: 12),
                 const SectionHeader(
-                  title: 'My Restaurant',
-                  subtitle: 'Branch locations and nearby restaurant access',
+                  title: 'OptiZenqor_restaurant',
+                  subtitle: 'Mirpur 1, Mirpur 10, and all branch locations',
                 ),
                 const SizedBox(height: 14),
                 ...controller.nearbyRestaurants.map(
@@ -266,7 +266,7 @@ class HomeScreen extends GetView<HomeController> {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 4),
                             child: Text(
-                              'Branch location: ${restaurant.nearestBranch!.name}, ${restaurant.nearestBranch!.area}',
+                              'OptiZenqor_restaurant - ${restaurant.nearestBranch!.area}',
                               style: const TextStyle(
                                 color: AppColors.textSecondary,
                                 fontWeight: FontWeight.w600,
@@ -428,7 +428,7 @@ class _HomePromoCarouselState extends State<_HomePromoCarousel> {
     return Column(
       children: [
         SizedBox(
-          height: 226,
+          height: 248,
           child: PageView.builder(
             controller: _pageController,
             itemCount: widget.slides.length,
@@ -453,10 +453,12 @@ class _HomePromoCarouselState extends State<_HomePromoCarousel> {
                     ],
                   ),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
                               slide.eyebrow,
@@ -468,10 +470,10 @@ class _HomePromoCarouselState extends State<_HomePromoCarousel> {
                             const SizedBox(height: 8),
                             Text(
                               slide.title,
-                              maxLines: 3,
+                              maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
-                                fontSize: 22,
+                                fontSize: 20,
                                 fontWeight: FontWeight.w800,
                                 color: Colors.white,
                                 height: 1.15,
@@ -480,14 +482,13 @@ class _HomePromoCarouselState extends State<_HomePromoCarousel> {
                             const SizedBox(height: 8),
                             Text(
                               slide.message,
-                              maxLines: 3,
+                              maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
                                 color: Colors.white,
                                 height: 1.3,
                               ),
                             ),
-                            const Spacer(),
                             SizedBox(
                               height: 40,
                               child: ElevatedButton(
@@ -499,15 +500,21 @@ class _HomePromoCarouselState extends State<_HomePromoCarousel> {
                           ],
                         ),
                       ),
-                      const SizedBox(width: 14),
-                      Container(
-                        width: 96,
-                        height: 144,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.16),
-                          borderRadius: BorderRadius.circular(28),
+                      const SizedBox(width: 12),
+                      Center(
+                        child: Container(
+                          width: 80,
+                          height: 112,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.16),
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                          child: Icon(
+                            slide.icon,
+                            color: Colors.white,
+                            size: 42,
+                          ),
                         ),
-                        child: Icon(slide.icon, color: Colors.white, size: 52),
                       ),
                     ],
                   ),
