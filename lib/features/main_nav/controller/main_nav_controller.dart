@@ -8,7 +8,7 @@ class MainNavController extends GetxController {
 
   final tabs = const [
     MainTab(label: 'Home', icon: Icons.home_rounded),
-    MainTab(label: 'Search', icon: Icons.search_rounded),
+    MainTab(label: 'Cart', icon: Icons.shopping_bag_rounded),
     MainTab(label: 'Orders', icon: Icons.receipt_long_rounded),
     MainTab(label: 'Favorites', icon: Icons.favorite_rounded),
     MainTab(label: 'Profile', icon: Icons.person_rounded),

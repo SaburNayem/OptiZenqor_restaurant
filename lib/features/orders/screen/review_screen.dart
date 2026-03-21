@@ -60,12 +60,28 @@ class _ReviewScreenState extends State<ReviewScreen> {
           ),
           const SizedBox(height: 16),
           OutlinedButton.icon(
-            onPressed: () {},
+            onPressed: () {
+              Get.snackbar(
+                'Image upload',
+                'Image upload is mocked for now, but the action is wired up.',
+                snackPosition: SnackPosition.BOTTOM,
+              );
+            },
             icon: const Icon(Icons.add_a_photo_outlined),
-            label: const Text('Upload image placeholder'),
+            label: const Text('Upload image'),
           ),
           const SizedBox(height: 24),
-          PrimaryButton(label: 'Submit review', onPressed: () => Get.back()),
+          PrimaryButton(
+            label: 'Submit review',
+            onPressed: () {
+              Get.snackbar(
+                'Review submitted',
+                'Thanks for sharing your feedback.',
+                snackPosition: SnackPosition.BOTTOM,
+              );
+              Get.back();
+            },
+          ),
         ],
       ),
     );

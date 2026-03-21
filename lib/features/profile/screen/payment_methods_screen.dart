@@ -31,7 +31,14 @@ class PaymentMethodsScreen extends GetView<CheckoutController> {
               ),
             ),
             OutlinedButton(
-              onPressed: () {},
+              onPressed: () {
+                controller.addSamplePaymentMethod();
+                Get.snackbar(
+                  'Payment method added',
+                  'A sample card has been added and selected.',
+                  snackPosition: SnackPosition.BOTTOM,
+                );
+              },
               child: const Text('Add payment method'),
             ),
           ],

@@ -31,7 +31,9 @@ class RestaurantController extends GetxController {
         .toList();
     list = list
         .where(
-          (restaurant) => restaurant.deliveryTime <= currentFilter.deliveryTime,
+          (restaurant) =>
+              (restaurant.nearestBranch?.distanceKm ?? double.infinity) <=
+              currentFilter.maxDistanceKm,
         )
         .toList();
     if (currentFilter.priceRange != 'All') {
@@ -44,8 +46,12 @@ class RestaurantController extends GetxController {
     switch (currentFilter.sortBy) {
       case 'Rating':
         list.sort((a, b) => b.rating.compareTo(a.rating));
-      case 'Delivery time':
-        list.sort((a, b) => a.deliveryTime.compareTo(b.deliveryTime));
+      case 'Nearest branch':
+        list.sort(
+          (a, b) => (a.nearestBranch?.distanceKm ?? double.infinity).compareTo(
+            b.nearestBranch?.distanceKm ?? double.infinity,
+          ),
+        );
       default:
         break;
     }

@@ -70,7 +70,7 @@ class RestaurantListScreen extends GetView<RestaurantController> {
     String sortBy = current.sortBy;
     String priceRange = current.priceRange;
     double rating = current.rating;
-    double deliveryTime = current.deliveryTime.toDouble();
+    double maxDistanceKm = current.maxDistanceKm.toDouble();
 
     Get.bottomSheet(
       StatefulBuilder(
@@ -85,7 +85,7 @@ class RestaurantListScreen extends GetView<RestaurantController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Refine restaurants',
+                  'Refine branches',
                   style: Theme.of(
                     context,
                   ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
@@ -116,7 +116,7 @@ class RestaurantListScreen extends GetView<RestaurantController> {
                 const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
                   initialValue: sortBy,
-                  items: ['Recommended', 'Rating', 'Delivery time']
+                  items: ['Recommended', 'Rating', 'Nearest branch']
                       .map(
                         (value) =>
                             DropdownMenuItem(value: value, child: Text(value)),
@@ -149,13 +149,13 @@ class RestaurantListScreen extends GetView<RestaurantController> {
                   onChanged: (value) => setState(() => rating = value),
                 ),
                 const SizedBox(height: 8),
-                Text('Delivery under ${deliveryTime.toInt()} min'),
+                Text('Nearest branch within ${maxDistanceKm.toInt()} km'),
                 Slider(
-                  value: deliveryTime,
-                  min: 15,
-                  max: 60,
-                  divisions: 9,
-                  onChanged: (value) => setState(() => deliveryTime = value),
+                  value: maxDistanceKm,
+                  min: 1,
+                  max: 20,
+                  divisions: 19,
+                  onChanged: (value) => setState(() => maxDistanceKm = value),
                 ),
                 const SizedBox(height: 18),
                 SizedBox(
@@ -166,7 +166,7 @@ class RestaurantListScreen extends GetView<RestaurantController> {
                         RestaurantFilter(
                           cuisine: cuisine,
                           rating: rating,
-                          deliveryTime: deliveryTime.toInt(),
+                          maxDistanceKm: maxDistanceKm.toInt(),
                           priceRange: priceRange,
                           sortBy: sortBy,
                         ),

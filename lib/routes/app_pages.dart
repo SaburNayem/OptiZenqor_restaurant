@@ -21,6 +21,7 @@ import '../../features/profile/screen/payment_methods_screen.dart';
 import '../../features/profile/screen/saved_addresses_screen.dart';
 import '../../features/restaurants/screen/restaurant_detail_screen.dart';
 import '../../features/restaurants/screen/restaurant_list_screen.dart';
+import '../../features/search/screen/search_screen.dart';
 import '../../features/settings/screen/settings_screen.dart';
 import 'app_routes.dart';
 
@@ -33,6 +34,7 @@ class AppPages {
     GetPage(name: AppRoutes.forgotPassword, page: ForgotPasswordScreen.new),
     GetPage(name: AppRoutes.otpVerification, page: OtpVerificationScreen.new),
     GetPage(name: AppRoutes.mainNav, page: MainNavScreen.new),
+    GetPage(name: AppRoutes.search, page: SearchScreen.new),
     GetPage(name: AppRoutes.restaurantList, page: RestaurantListScreen.new),
     GetPage(name: AppRoutes.restaurantDetail, page: RestaurantDetailScreen.new),
     GetPage(name: AppRoutes.cart, page: CartScreen.new),

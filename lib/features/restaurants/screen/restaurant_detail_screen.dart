@@ -5,6 +5,7 @@ import '../../../routes/app_routes.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/models/food_item.dart';
 import '../../../core/widgets/app_shell.dart';
+import '../../../core/widgets/branch_map_card.dart';
 import '../../../core/widgets/food_item_card.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../cart/controller/cart_controller.dart';
@@ -26,6 +27,7 @@ class RestaurantDetailScreen extends GetView<RestaurantController> {
     }
 
     final tabs = controller.menuTabsForRestaurant(restaurantId);
+    final selectedBranchId = (restaurant.nearestBranch?.id ?? '').obs;
     if (!tabs.contains(controller.selectedCategoryTab.value)) {
       controller.setCategoryTab('All');
     }
@@ -37,6 +39,9 @@ class RestaurantDetailScreen extends GetView<RestaurantController> {
             ? <FoodItem>[]
             : controller.similarItems(restaurantId, foods.first.category);
         final gradient = restaurant.bannerGradient.map(Color.new).toList();
+        final selectedBranch = restaurant.branches.firstWhereOrNull(
+          (branch) => branch.id == selectedBranchId.value,
+        );
         return ListView(
           padding: const EdgeInsets.all(20),
           children: [
@@ -130,17 +135,126 @@ class RestaurantDetailScreen extends GetView<RestaurantController> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   _Stat(label: 'Rating', value: '${restaurant.rating}'),
+                  _Stat(label: 'Branches', value: '${restaurant.branchCount}'),
                   _Stat(
-                    label: 'Delivery',
-                    value: '${restaurant.deliveryTime} min',
-                  ),
-                  _Stat(
-                    label: 'Min order',
-                    value: '\$${restaurant.minimumOrder.toStringAsFixed(0)}',
+                    label: 'Nearest',
+                    value: selectedBranch == null
+                        ? '--'
+                        : '${selectedBranch.distanceKm.toStringAsFixed(1)} km',
                   ),
                 ],
               ),
             ),
+            const SizedBox(height: 20),
+            Text(
+              'Branch map',
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+            ),
+            const SizedBox(height: 12),
+            BranchMapCard(
+              branches: restaurant.branches,
+              selectedBranchId: selectedBranchId.value,
+              onSelectBranch: (branch) => selectedBranchId.value = branch.id,
+            ),
+            if (selectedBranch != null) ...[
+              const SizedBox(height: 14),
+              Container(
+                padding: const EdgeInsets.all(18),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.9),
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            selectedBranch.name,
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(fontWeight: FontWeight.w800),
+                          ),
+                        ),
+                        if (selectedBranch.isFlagship)
+                          const Chip(label: Text('Flagship')),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Text(selectedBranch.address),
+                    const SizedBox(height: 10),
+                    Wrap(
+                      spacing: 10,
+                      runSpacing: 10,
+                      children: [
+                        _MiniInfo(
+                          icon: Icons.near_me_rounded,
+                          label:
+                              '${selectedBranch.distanceKm.toStringAsFixed(1)} km away',
+                        ),
+                        _MiniInfo(
+                          icon: Icons.schedule_rounded,
+                          label: selectedBranch.openHours,
+                        ),
+                        _MiniInfo(
+                          icon: Icons.groups_rounded,
+                          label: '${selectedBranch.queueMinutes} min wait',
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: selectedBranch.features
+                          .map(
+                            (feature) => Chip(
+                              label: Text(feature),
+                              backgroundColor: AppColors.accent.withValues(
+                                alpha: 0.18,
+                              ),
+                            ),
+                          )
+                          .toList(),
+                    ),
+                    const SizedBox(height: 14),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            onPressed: () {
+                              Get.snackbar(
+                                'Directions ready',
+                                'Map view centered on ${selectedBranch.area}.',
+                                snackPosition: SnackPosition.BOTTOM,
+                              );
+                            },
+                            icon: const Icon(Icons.map_outlined),
+                            label: const Text('Open map'),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            onPressed: () {
+                              Get.snackbar(
+                                'Branch selected',
+                                '${selectedBranch.name} is now your active branch.',
+                                snackPosition: SnackPosition.BOTTOM,
+                              );
+                            },
+                            icon: const Icon(Icons.storefront_rounded),
+                            label: const Text('Choose branch'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
             const SizedBox(height: 20),
             SizedBox(
               height: 46,
@@ -220,9 +334,18 @@ class RestaurantDetailScreen extends GetView<RestaurantController> {
             ],
             const SizedBox(height: 16),
             PrimaryButton(
-              label: 'View cart (${cartController.cartItems.length})',
-              onPressed: () => Get.toNamed(AppRoutes.cart),
-              icon: Icons.shopping_bag_outlined,
+              label: 'Reserve or order from this branch',
+              onPressed: () {
+                Get.toNamed(AppRoutes.cart);
+                if (selectedBranch != null) {
+                  Get.snackbar(
+                    'Branch linked',
+                    'Menu opened for ${selectedBranch.name}.',
+                    snackPosition: SnackPosition.BOTTOM,
+                  );
+                }
+              },
+              icon: Icons.restaurant_menu_rounded,
             ),
           ],
         );
@@ -317,6 +440,32 @@ class _Stat extends StatelessWidget {
         const SizedBox(height: 4),
         Text(label, style: const TextStyle(color: AppColors.textSecondary)),
       ],
+    );
+  }
+}
+
+class _MiniInfo extends StatelessWidget {
+  const _MiniInfo({required this.icon, required this.label});
+
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF6EDE4),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 16, color: AppColors.primary),
+          const SizedBox(width: 8),
+          Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
+        ],
+      ),
     );
   }
 }

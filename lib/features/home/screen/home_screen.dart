@@ -1,17 +1,20 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../routes/app_routes.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/models/food_item.dart';
+import '../../../core/models/restaurant.dart';
 import '../../../core/widgets/app_search_field.dart';
 import '../../../core/widgets/app_shell.dart';
 import '../../../core/widgets/food_item_card.dart';
 import '../../../core/widgets/loading_skeleton.dart';
 import '../../../core/widgets/restaurant_card.dart';
 import '../../../core/widgets/section_header.dart';
+import '../../../routes/app_routes.dart';
 import '../../cart/controller/cart_controller.dart';
 import '../../favorites/controller/favorites_controller.dart';
-import '../../main_nav/controller/main_nav_controller.dart';
 import '../controller/home_controller.dart';
 
 class HomeScreen extends GetView<HomeController> {
@@ -21,6 +24,7 @@ class HomeScreen extends GetView<HomeController> {
   Widget build(BuildContext context) {
     final favoritesController = Get.find<FavoritesController>();
     final cartController = Get.find<CartController>();
+
     return AppShell(
       child: RefreshIndicator(
         onRefresh: controller.loadHome,
@@ -29,7 +33,7 @@ class HomeScreen extends GetView<HomeController> {
             return ListView(
               padding: const EdgeInsets.all(20),
               children: const [
-                LoadingSkeleton(height: 160),
+                LoadingSkeleton(height: 220),
                 SizedBox(height: 16),
                 LoadingSkeleton(height: 120),
                 SizedBox(height: 16),
@@ -37,6 +41,9 @@ class HomeScreen extends GetView<HomeController> {
               ],
             );
           }
+
+          final hasQuery = controller.query.value.trim().isNotEmpty;
+
           return ListView(
             padding: const EdgeInsets.all(20),
             children: [
@@ -47,17 +54,15 @@ class HomeScreen extends GetView<HomeController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Deliver to',
+                          'My restaurant',
                           style: Theme.of(context).textTheme.bodySmall
                               ?.copyWith(color: AppColors.textSecondary),
                         ),
                         const SizedBox(height: 4),
-                        Obx(
-                          () => Text(
-                            controller.location.value,
-                            style: Theme.of(context).textTheme.titleMedium
-                                ?.copyWith(fontWeight: FontWeight.w700),
-                          ),
+                        Text(
+                          controller.location.value,
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(fontWeight: FontWeight.w700),
                         ),
                       ],
                     ),
@@ -66,133 +71,185 @@ class HomeScreen extends GetView<HomeController> {
                     onPressed: () => Get.toNamed(AppRoutes.notifications),
                     icon: const Icon(Icons.notifications_none_rounded),
                   ),
-                  Stack(
-                    children: [
-                      IconButton(
-                        onPressed: () => Get.toNamed(AppRoutes.cart),
-                        icon: const Icon(Icons.shopping_bag_outlined),
-                      ),
-                      Positioned(
-                        right: 8,
-                        top: 8,
-                        child: Obx(
-                          () => CircleAvatar(
-                            radius: 9,
-                            backgroundColor: AppColors.primary,
-                            child: Text(
-                              '${cartController.cartItems.length}',
-                              style: const TextStyle(
-                                fontSize: 10,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                ],
+              ),
+              const SizedBox(height: 18),
+              const _HomePromoCarousel(
+                slides: [
+                  _PromoSlideData(
+                    eyebrow: 'Signature Dining',
+                    title: 'Chef table experiences at 3 branches',
+                    message:
+                        'Discover flagship ambiance, premium platters, and branch-exclusive menus.',
+                    colors: [Color(0xFF6E2C1B), Color(0xFFE58C54)],
+                    icon: Icons.ramen_dining_rounded,
+                  ),
+                  _PromoSlideData(
+                    eyebrow: 'Family Feast',
+                    title: 'Weekend buffet and kids corner now live',
+                    message:
+                        'Reserve your table early and explore branch events near you.',
+                    colors: [Color(0xFF0F6A5B), Color(0xFF6BC7A0)],
+                    icon: Icons.local_dining_rounded,
+                  ),
+                  _PromoSlideData(
+                    eyebrow: 'Branch Offers',
+                    title: 'Live grills, coffee bar, and dessert studio',
+                    message:
+                        'Each location has its own special menu and branch atmosphere.',
+                    colors: [Color(0xFF1E355D), Color(0xFF5AA4E8)],
+                    icon: Icons.restaurant_menu_rounded,
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 22),
               AppSearchField(
                 controller: controller.searchController,
-                readOnly: true,
-                onTap: () => Get.find<MainNavController>().changeTab(1),
+                onChanged: controller.updateSearch,
+                hintText: 'Search food, branch, or area',
               ),
-              const SizedBox(height: 24),
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(28),
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF6E2C1B), Color(0xFFE58C54)],
-                  ),
+              const SizedBox(height: 14),
+              if (!hasQuery && controller.trendingSearches.isNotEmpty) ...[
+                Text(
+                  'Suggestions',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                const SizedBox(height: 10),
+                Wrap(
+                  spacing: 10,
+                  runSpacing: 10,
                   children: [
-                    const Text(
-                      'Tonight’s best offer',
-                      style: TextStyle(color: Colors.white70),
-                    ),
-                    const SizedBox(height: 10),
-                    const Text(
-                      'Biryani feast + BBQ sides',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w800,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      controller.promos.firstOrNull ?? '',
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                    const SizedBox(height: 14),
-                    ElevatedButton(
-                      onPressed: () => Get.toNamed(AppRoutes.restaurantList),
-                      child: const Text('Order now'),
-                    ),
+                    ...controller.trendingSearches
+                        .take(4)
+                        .map(
+                          (entry) => ActionChip(
+                            label: Text(entry),
+                            onPressed: () => controller.useSuggestion(entry),
+                          ),
+                        ),
+                    ...controller.recentSearches
+                        .take(2)
+                        .map(
+                          (entry) => ActionChip(
+                            label: Text(entry),
+                            onPressed: () => controller.useSuggestion(entry),
+                          ),
+                        ),
                   ],
                 ),
-              ),
-              const SizedBox(height: 28),
-              const SectionHeader(
-                title: 'Food Categories',
-                subtitle: 'Explore by craving',
-              ),
-              const SizedBox(height: 14),
-              SizedBox(
-                height: 108,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    final category = controller.categories[index];
-                    return Container(
-                      width: 88,
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: category.color,
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(category.icon, color: AppColors.textPrimary),
-                          const SizedBox(height: 10),
-                          Text(
-                            category.name,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(width: 12),
-                  itemCount: controller.categories.length,
+              ],
+              if (hasQuery) ...[
+                const SizedBox(height: 8),
+                _InlineSearchResults(
+                  restaurants: controller.homeSearchRestaurants,
+                  foods: controller.homeSearchFoods,
+                  favoritesController: favoritesController,
+                  cartController: cartController,
                 ),
-              ),
-              const SizedBox(height: 28),
-              SectionHeader(
-                title: 'Popular Restaurants',
-                subtitle: 'Handpicked places people reorder from',
-                actionLabel: 'See all',
-                onTap: () => Get.toNamed(AppRoutes.restaurantList),
-              ),
-              const SizedBox(height: 14),
-              ...controller.restaurants
-                  .take(2)
-                  .map(
-                    (restaurant) => Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: Obx(
-                        () => RestaurantCard(
+              ] else ...[
+                const SizedBox(height: 24),
+                const SectionHeader(
+                  title: 'Food Categories',
+                  subtitle: 'Tap a category to filter popular food',
+                ),
+                const SizedBox(height: 14),
+                SizedBox(
+                  height: 108,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: controller.categories.length + 1,
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(width: 12),
+                    itemBuilder: (context, index) {
+                      final isAll = index == 0;
+                      final label = isAll
+                          ? 'All'
+                          : controller.categories[index - 1].name;
+                      final icon = isAll
+                          ? Icons.grid_view_rounded
+                          : controller.categories[index - 1].icon;
+                      final color = isAll
+                          ? const Color(0xFFEEDCC9)
+                          : controller.categories[index - 1].color;
+                      final selected =
+                          controller.selectedCategory.value == label;
+
+                      return GestureDetector(
+                        onTap: () => controller.selectCategory(label),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 220),
+                          width: 92,
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: selected ? AppColors.primary : color,
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                icon,
+                                color: selected
+                                    ? Colors.white
+                                    : AppColors.textPrimary,
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                label,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 12,
+                                  color: selected
+                                      ? Colors.white
+                                      : AppColors.textPrimary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(height: 28),
+                SectionHeader(
+                  title: 'Popular Food',
+                  subtitle: controller.selectedCategory.value == 'All'
+                      ? 'Top dishes from your restaurant branches'
+                      : 'Top ${controller.selectedCategory.value} dishes',
+                ),
+                const SizedBox(height: 14),
+                ...controller.popularFoods
+                    .take(4)
+                    .map(
+                      (item) => Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: FoodItemCard(
+                          item: item,
+                          onAdd: () => cartController.addItem(item),
+                          onTap: () => Get.toNamed(
+                            AppRoutes.restaurantDetail,
+                            arguments: item.restaurantId,
+                          ),
+                        ),
+                      ),
+                    ),
+                const SizedBox(height: 12),
+                const SectionHeader(
+                  title: 'My Restaurant',
+                  subtitle: 'Branch locations and nearby restaurant access',
+                ),
+                const SizedBox(height: 14),
+                ...controller.nearbyRestaurants.map(
+                  (restaurant) => Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        RestaurantCard(
                           restaurant: restaurant,
                           onTap: () => Get.toNamed(
                             AppRoutes.restaurantDetail,
@@ -204,37 +261,78 @@ class HomeScreen extends GetView<HomeController> {
                             restaurant.id,
                           ),
                         ),
-                      ),
+                        const SizedBox(height: 8),
+                        if (restaurant.nearestBranch != null)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4),
+                            child: Text(
+                              'Branch location: ${restaurant.nearestBranch!.name}, ${restaurant.nearestBranch!.area}',
+                              style: const TextStyle(
+                                color: AppColors.textSecondary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
                   ),
-              const SizedBox(height: 12),
-              const SectionHeader(
-                title: 'Recommended Food',
-                subtitle: 'Based on top-rated picks',
-              ),
-              const SizedBox(height: 14),
-              ...controller.recommendedFoods
-                  .take(3)
-                  .map(
-                    (item) => Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: FoodItemCard(
-                        item: item,
-                        onAdd: () => cartController.addItem(item),
-                        onTap: () => Get.toNamed(
-                          AppRoutes.restaurantDetail,
-                          arguments: item.restaurantId,
-                        ),
-                      ),
-                    ),
-                  ),
-              const SizedBox(height: 12),
-              const SectionHeader(
-                title: 'Nearby Restaurants',
-                subtitle: 'Quick delivery around you',
-              ),
-              const SizedBox(height: 14),
-              ...controller.nearbyRestaurants.map(
+                ),
+              ],
+            ],
+          );
+        }),
+      ),
+    );
+  }
+}
+
+class _InlineSearchResults extends StatelessWidget {
+  const _InlineSearchResults({
+    required this.restaurants,
+    required this.foods,
+    required this.favoritesController,
+    required this.cartController,
+  });
+
+  final List<Restaurant> restaurants;
+  final List<FoodItem> foods;
+  final FavoritesController favoritesController;
+  final CartController cartController;
+
+  @override
+  Widget build(BuildContext context) {
+    if (restaurants.isEmpty && foods.isEmpty) {
+      return Container(
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(24),
+        ),
+        child: const Text('No search results found on the home screen.'),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Search Results',
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+        ),
+        const SizedBox(height: 14),
+        if (restaurants.isNotEmpty) ...[
+          Text(
+            'Branches',
+            style: Theme.of(
+              context,
+            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+          ),
+          const SizedBox(height: 10),
+          ...restaurants
+              .take(2)
+              .map(
                 (restaurant) => Padding(
                   padding: const EdgeInsets.only(bottom: 16),
                   child: RestaurantCard(
@@ -251,10 +349,207 @@ class HomeScreen extends GetView<HomeController> {
                   ),
                 ),
               ),
-            ],
-          );
-        }),
-      ),
+        ],
+        if (foods.isNotEmpty) ...[
+          const SizedBox(height: 6),
+          Text(
+            'Food',
+            style: Theme.of(
+              context,
+            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+          ),
+          const SizedBox(height: 10),
+          ...foods
+              .take(3)
+              .map(
+                (item) => Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: FoodItemCard(
+                    item: item,
+                    onAdd: () => cartController.addItem(item),
+                    onTap: () => Get.toNamed(
+                      AppRoutes.restaurantDetail,
+                      arguments: item.restaurantId,
+                    ),
+                  ),
+                ),
+              ),
+        ],
+      ],
     );
   }
+}
+
+class _HomePromoCarousel extends StatefulWidget {
+  const _HomePromoCarousel({required this.slides});
+
+  final List<_PromoSlideData> slides;
+
+  @override
+  State<_HomePromoCarousel> createState() => _HomePromoCarouselState();
+}
+
+class _HomePromoCarouselState extends State<_HomePromoCarousel> {
+  late final PageController _pageController;
+  Timer? _timer;
+  int _currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(viewportFraction: 0.94);
+    _startAutoPlay();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void _startAutoPlay() {
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 4), (_) {
+      if (!mounted || widget.slides.length < 2) {
+        return;
+      }
+      _currentIndex = (_currentIndex + 1) % widget.slides.length;
+      _pageController.animateToPage(
+        _currentIndex,
+        duration: const Duration(milliseconds: 420),
+        curve: Curves.easeOutCubic,
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          height: 226,
+          child: PageView.builder(
+            controller: _pageController,
+            itemCount: widget.slides.length,
+            onPageChanged: (index) => setState(() => _currentIndex = index),
+            itemBuilder: (context, index) {
+              final slide = widget.slides[index];
+              return Padding(
+                padding: EdgeInsets.only(
+                  right: index == widget.slides.length - 1 ? 0 : 10,
+                ),
+                child: Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    gradient: LinearGradient(colors: slide.colors),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Color(0x22000000),
+                        blurRadius: 18,
+                        offset: Offset(0, 10),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              slide.eyebrow,
+                              style: const TextStyle(
+                                color: Colors.white70,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              slide.title,
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.white,
+                                height: 1.15,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              slide.message,
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                height: 1.3,
+                              ),
+                            ),
+                            const Spacer(),
+                            SizedBox(
+                              height: 40,
+                              child: ElevatedButton(
+                                onPressed: () =>
+                                    Get.toNamed(AppRoutes.restaurantList),
+                                child: const Text('View Branches'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 14),
+                      Container(
+                        width: 96,
+                        height: 144,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.16),
+                          borderRadius: BorderRadius.circular(28),
+                        ),
+                        child: Icon(slide.icon, color: Colors.white, size: 52),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: 12),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(widget.slides.length, (index) {
+            final isActive = index == _currentIndex;
+            return AnimatedContainer(
+              duration: const Duration(milliseconds: 240),
+              margin: const EdgeInsets.symmetric(horizontal: 4),
+              height: 8,
+              width: isActive ? 24 : 8,
+              decoration: BoxDecoration(
+                color: isActive ? AppColors.primary : AppColors.border,
+                borderRadius: BorderRadius.circular(999),
+              ),
+            );
+          }),
+        ),
+      ],
+    );
+  }
+}
+
+class _PromoSlideData {
+  const _PromoSlideData({
+    required this.eyebrow,
+    required this.title,
+    required this.message,
+    required this.colors,
+    required this.icon,
+  });
+
+  final String eyebrow;
+  final String title;
+  final String message;
+  final List<Color> colors;
+  final IconData icon;
 }

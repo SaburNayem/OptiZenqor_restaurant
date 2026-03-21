@@ -21,6 +21,7 @@ class RestaurantCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gradient = restaurant.bannerGradient.map(Color.new).toList();
+    final nearestBranch = restaurant.nearestBranch;
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(24),
@@ -99,13 +100,11 @@ class RestaurantCard extends StatelessWidget {
                 runSpacing: 8,
                 children: [
                   _InfoChip(label: '${restaurant.rating}'),
-                  _InfoChip(
-                    label: AppFormatters.timeRange(restaurant.deliveryTime),
-                  ),
-                  _InfoChip(
-                    label:
-                        'Min ${AppFormatters.currency(restaurant.minimumOrder)}',
-                  ),
+                  _InfoChip(label: '${restaurant.branchCount} branches'),
+                  if (nearestBranch != null)
+                    _InfoChip(
+                      label: AppFormatters.distanceKm(nearestBranch.distanceKm),
+                    ),
                   _InfoChip(label: restaurant.priceRange),
                 ],
               ),

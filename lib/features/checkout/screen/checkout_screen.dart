@@ -37,7 +37,14 @@ class CheckoutScreen extends GetView<CheckoutController> {
               ),
             ),
             OutlinedButton(
-              onPressed: () {},
+              onPressed: () {
+                controller.addSampleAddress();
+                Get.snackbar(
+                  'Address added',
+                  'A sample delivery address has been added and selected.',
+                  snackPosition: SnackPosition.BOTTOM,
+                );
+              },
               child: const Text('Add new address'),
             ),
             const SizedBox(height: 20),

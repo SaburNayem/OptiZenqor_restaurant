@@ -12,8 +12,15 @@ class OrdersController extends GetxController {
 
   List<OrderSummary> get activeOrders =>
       orders.where((order) => order.isActive).toList();
-  List<OrderSummary> get pastOrders =>
-      orders.where((order) => !order.isActive).toList();
+  List<OrderSummary> get cancelledOrders => orders
+      .where((order) => order.status.toLowerCase().contains('cancel'))
+      .toList();
+  List<OrderSummary> get pastOrders => orders
+      .where(
+        (order) =>
+            !order.isActive && !order.status.toLowerCase().contains('cancel'),
+      )
+      .toList();
 
   @override
   void onInit() {

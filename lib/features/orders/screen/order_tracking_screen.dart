@@ -67,9 +67,27 @@ class OrderTrackingScreen extends GetView<OrdersController> {
             ),
           ),
           const SizedBox(height: 20),
-          PrimaryButton(label: 'Contact restaurant', onPressed: () {}),
+          PrimaryButton(
+            label: 'Contact restaurant',
+            onPressed: () {
+              Get.snackbar(
+                'Restaurant support',
+                'The restaurant has been notified to contact you shortly.',
+                snackPosition: SnackPosition.BOTTOM,
+              );
+            },
+          ),
           const SizedBox(height: 12),
-          OutlinedButton(onPressed: () {}, child: const Text('Contact rider')),
+          OutlinedButton(
+            onPressed: () {
+              Get.snackbar(
+                'Rider support',
+                'Your rider contact request has been sent.',
+                snackPosition: SnackPosition.BOTTOM,
+              );
+            },
+            child: const Text('Contact rider'),
+          ),
           const SizedBox(height: 12),
           OutlinedButton(
             onPressed: () =>

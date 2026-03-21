@@ -5,4 +5,7 @@ class AppFormatters {
     final end = minutes + 10;
     return '$minutes-$end min';
   }
+
+  static String distanceKm(double distance) =>
+      '${distance.toStringAsFixed(1)} km';
 }

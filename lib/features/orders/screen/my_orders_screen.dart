@@ -17,7 +17,7 @@ class MyOrdersScreen extends GetView<OrdersController> {
     final cartController = Get.find<CartController>();
     final restaurantController = Get.find<RestaurantController>();
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: AppShell(
         child: Column(
           children: [
@@ -35,6 +35,7 @@ class MyOrdersScreen extends GetView<OrdersController> {
               tabs: [
                 Tab(text: 'Active'),
                 Tab(text: 'Past'),
+                Tab(text: 'Cancelled'),
               ],
             ),
             Expanded(
@@ -119,6 +120,32 @@ class MyOrdersScreen extends GetView<OrdersController> {
                 ),
               ),
             ),
+            controller.cancelledOrders.isEmpty
+                ? const Padding(
+                    padding: EdgeInsets.all(20),
+                    child: EmptyState(
+                      title: 'No cancelled orders',
+                      message: 'Cancelled restaurant orders will appear here.',
+                      icon: Icons.cancel_outlined,
+                    ),
+                  )
+                : ListView.builder(
+                    padding: const EdgeInsets.all(20),
+                    itemCount: controller.cancelledOrders.length,
+                    itemBuilder: (context, index) {
+                      final order = controller.cancelledOrders[index];
+                      return _OrderTile(
+                        title: order.restaurantName,
+                        subtitle: order.createdAtLabel,
+                        trailing: order.status,
+                        amount: AppFormatters.currency(order.total),
+                        onTap: () => Get.toNamed(
+                          AppRoutes.orderDetail,
+                          arguments: order.id,
+                        ),
+                      );
+                    },
+                  ),
           ],
         ),
       ),

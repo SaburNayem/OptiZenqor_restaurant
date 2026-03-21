@@ -83,7 +83,13 @@ class _SocialButtons extends StatelessWidget {
             (entry) => Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: OutlinedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Get.snackbar(
+                    entry,
+                    'Demo social sign-in is connected as a placeholder action.',
+                    snackPosition: SnackPosition.BOTTOM,
+                  );
+                },
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 54),
                 ),

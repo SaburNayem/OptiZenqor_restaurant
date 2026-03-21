@@ -6,6 +6,7 @@ abstract class AppRoutes {
   static const forgotPassword = '/forgot-password';
   static const otpVerification = '/otp-verification';
   static const mainNav = '/main-nav';
+  static const search = '/search';
   static const restaurantList = '/restaurants';
   static const restaurantDetail = '/restaurant-detail';
   static const cart = '/cart';

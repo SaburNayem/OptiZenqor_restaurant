@@ -19,4 +19,8 @@ class NotificationsController extends GetxController {
   Future<void> load() async {
     notifications.assignAll(await _apiService.getNotifications());
   }
+
+  void deleteNotification(String id) {
+    notifications.removeWhere((item) => item.id == id);
+  }
 }
